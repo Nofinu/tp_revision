@@ -21,6 +21,9 @@ public class Client {
             listeBillets.add(event);
             System.out.println("le billet pour l'evenement "+event+" a bien ete acheter");
         }
+        else{
+            System.out.println("impossible d'acheter un billet");
+        }
     }
 
     public void annulerBillet (Evenement event){
@@ -52,6 +55,10 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Evenement> getListeBillets() {
+        return listeBillets;
     }
 
     @Override

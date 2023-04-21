@@ -184,6 +184,7 @@ public class Ihm {
             System.out.println("1/ ajouter un Evenement");
             System.out.println("2/ modifier un Evenement");
             System.out.println("3/ supprimer un Evenement");
+            System.out.println("4/ afficher la liste des evenements");
             System.out.println("0/ retourner au menu generale");
             System.out.println("entrer votre choix :");
             int entry = s.nextInt();
@@ -195,7 +196,10 @@ public class Ihm {
 
                     break;
                 case 3 :
-
+                        this.suprEvenement();
+                    break;
+                case 4 :
+                    this.afficheList(this.listEvenement);
                     break;
                 case 0:
                     this.menuGenerale();
@@ -208,7 +212,7 @@ public class Ihm {
         }
         catch (InputMismatchException e){
             System.out.println("entrer une valeur numerique ");
-            this.menuLieux();
+            this.menuCLient();
         }
     }
 
@@ -249,6 +253,208 @@ public class Ihm {
         }
     }
 
+    public void suprEvenement (){
+        try{
+            System.out.println("--------supr evenement----------");
+            afficheList(this.listEvenement);
+            System.out.println("quelle evenement vouler vous supprimer (0 pour retour) : ");
+            int entry = s.nextInt();
+
+            if(entry == 0){
+                this.menuEvenement();
+            }
+            else{
+                this.listEvenement.remove(entry-1);
+                System.out.println("l'evenement a bien ete supprimer");
+                this.menuEvenement();
+            }
+        }
+        catch( InputMismatchException e){
+            System.out.println("entrer une valeur numerique ");
+            this.suprEvenement();
+        }
+    }
+
+    //gestion client
+
+    public void menuCLient (){
+        try{
+            System.out.println("----------menu Client---------");
+            System.out.println("1/ ajouter un Client");
+            System.out.println("2/ modifier un Client");
+            System.out.println("3/ supprimer un Client");
+            System.out.println("4/ acheter un billet");
+            System.out.println("5/ annuler un billet");
+            System.out.println("6/ afficher la liste des billets d'un clients");
+            System.out.println("0/ retourner au menu generale");
+            System.out.println("entrer votre choix :");
+            int entry = s.nextInt();
+            switch (entry){
+                case 1:
+                    this.addClient();
+                    break;
+                case 2:
+                    this.modifClient();
+                    break;
+                case 3 :
+                    this.suprClient();
+                    break;
+                case 4 :
+                    achatBillet(true);
+                    break;
+                case 5 :
+                    achatBillet(false);
+                    break;
+                case 6:
+                    affichageBillet();
+                    break;
+                case 0:
+                    this.menuGenerale();
+                    break;
+                default :
+                    System.out.println("entrer une valeur correspondant a un choix");
+                    this.menuCLient();
+                    break;
+            }
+        }
+        catch (InputMismatchException e){
+            System.out.println("entrer une valeur numerique ");
+            this.menuCLient();
+        }
+    }
+
+    public void addClient (){
+        try {
+            System.out.println("--------ajouter CLient----------");
+            System.out.println("entrer le nom du clien :");
+            String nom = s.next();
+
+            System.out.println("entrer le prenom du client :");
+            String prenom = s.next();
+
+            System.out.println("entrer l'email du client : ");
+            String email = s.next();
+
+            this.listCLient.add(new Client(nom,prenom,email));
+            System.out.println("le CLient a bien ete ajouter :");
+            System.out.println(listCLient.get(listCLient.size()-1));
+            this.menuEvenement();
+        }
+        catch (InputMismatchException e) {
+            System.out.println("entrer une valeur numerique ");
+            this.addEvenement();
+        }
+    }
+
+    public void modifClient (){
+        try{
+            try{
+                System.out.println("--------modifier Client----------");
+                afficheList(this.listCLient);
+                System.out.println("quelle Client vouler vous modifier : ");
+                int entry = s.nextInt();
+
+                System.out.println(this.listCLient.get(entry-1));
+                System.out.println("entrer le nouveau nom : ");
+                String nom =s.next();
+                System.out.println("entrer le nouveau prenom : ");
+                String prenom = s.next();
+                System.out.println("entrer la nouvelle adresse email : ");
+                String email = s.next();
+
+                this.listCLient.set(entry-1,new Client(nom,prenom,email));
+                System.out.println(this.listCLient.get(entry-1));
+                this.menuCLient();
+            }
+            catch (IndexOutOfBoundsException e){
+                this.menuCLient();
+            }
+        }
+        catch (InputMismatchException e){
+            System.out.println("entrer une valeur numerique ");
+            this.modifClient();
+        }
+    }
+
+    public void suprClient (){
+        try{
+            System.out.println("--------supr CLient----------");
+            afficheList(this.listCLient);
+            System.out.println("quelle Client vouler vous supprimer (0 pour retour) : ");
+            int entry = s.nextInt();
+
+            if(entry == 0){
+                this.menuCLient();
+            }
+            else{
+                this.listCLient.remove(entry-1);
+                System.out.println("le CLient a bien ete supprimer");
+                this.menuCLient();
+            }
+        }
+        catch( InputMismatchException e){
+            System.out.println("entrer une valeur numerique ");
+            this.suprClient();
+        }
+    }
+
+    public void achatBillet (boolean achat){
+        try{
+            if (achat){
+                System.out.println("---------achat billet -----------");
+            }
+            else{
+                System.out.println("---------Annulation billet -----------");
+            }
+
+            afficheList(this.listCLient);
+            System.out.println("choisiser un client :");
+            int client = s.nextInt();
+
+            System.out.println("client choisi "+ this.listCLient.get(client-1));
+
+            afficheList(this.listEvenement);
+            System.out.println("choisiser un evenemement");
+            int event = s.nextInt();
+
+            if(achat){
+                this.listCLient.get(client-1).acheterBillet(this.listEvenement.get(event-1));
+            }
+            else {
+                this.listCLient.get(client-1).annulerBillet(this.listEvenement.get(event-1));
+            }
+            this.menuCLient();
+        }
+        catch (IndexOutOfBoundsException e){
+            System.out.println("index out of bound");
+            this.menuCLient();
+        }
+        catch (InputMismatchException e){
+            System.out.println("entrer une valeur valide");
+            this.achatBillet(achat);
+        }
+    }
+
+    public void affichageBillet (){
+        try{
+            System.out.println("---------afffichage des billets----------");
+            afficheList(this.listCLient);
+            System.out.println("choisiser un client :");
+            int client = s.nextInt();
+
+            this.afficheList(this.listCLient.get(client-1).getListeBillets());
+
+            this.menuCLient();
+        }
+        catch (IndexOutOfBoundsException e){
+            System.out.println("index out of bound");
+            this.menuCLient();
+        }
+        catch (InputMismatchException e){
+            System.out.println("entrer une valeur valide");
+            this.affichageBillet();
+        }
+    }
 
     //fonctions global
     public void afficheList (List list){
@@ -257,8 +463,6 @@ public class Ihm {
     }
 
 
-    public void menuCLient (){
 
-    }
 
 }
